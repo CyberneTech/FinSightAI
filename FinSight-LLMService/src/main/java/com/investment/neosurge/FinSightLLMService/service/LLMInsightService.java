@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.investment.neosurge.FinSightLLMService.model.Message;
 import com.investment.neosurge.FinSightLLMService.model.OpenAIRequest;
 import com.investment.neosurge.FinSightAI.model.UserFinancialProfile;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
@@ -65,8 +66,11 @@ public class LLMInsightService {
             // receiving response from the api
             HttpResponse<String> response = null;
             response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-            return response.body();
+            JSONObject responseJson = new JSONObject(response.body());
+            return responseJson.getJSONArray("choices")
+                    .getJSONObject(0)
+                    .getJSONObject("message")
+                    .getString("content");
 
         } catch (Exception e) {
             throw new RuntimeException(e);

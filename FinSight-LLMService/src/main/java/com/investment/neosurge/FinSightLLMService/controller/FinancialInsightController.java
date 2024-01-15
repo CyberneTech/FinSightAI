@@ -42,21 +42,22 @@ public class FinancialInsightController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/getInsights")
-    public ResponseEntity<?> getUserFinancialPreference(@RequestHeader(name="Authorization") String jwtToken) {
+    public ResponseEntity<?> getInvestmentInsightsForUser(@RequestHeader(name="Authorization") String jwtToken) {
         jwtToken = jwtToken.split(" ")[1];
+        Map<String,String> response = new HashMap<>();
         try {
             //checking for bucket capacity and calling service to fetch insight data
             if(bucket.tryConsume(1)) {
                 UserFinancialProfile userFinancialProfile = userFinancialPreferenceService.getUserFinancialProfile(jwtToken);
                 String responseInsight = llmInsightService.llmGenerateInsight(userFinancialProfile);
-                return new ResponseEntity<>(responseInsight, HttpStatus.OK);
+                response.put("insight",responseInsight);
+                return new ResponseEntity<>(response, HttpStatus.OK);
             }
             else {
                 throw new RuntimeException("Too many request");
             }
         }
         catch (Exception e) {
-            Map<String,String> response = new HashMap<>();
             response.put("error", e.toString());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
