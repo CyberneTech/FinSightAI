@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "3ddb4281-af1d-40a1-ae3d-4e18f5c2cdb0",
+		"name": "FinSightAI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20137026"
+	},
+	"item": [
+		{
+			"name": "signin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"newTestUser1\",\n    \"email\": \"example@gmail.com\",\n    \"password\": \"helloworld\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/signin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"example2@gmail.com\",\n    \"password\": \"helloworld\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserFinancialPreferenceData",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWEyOTRmM2MyMDU3ZTAzZjBlOGQ3MmMiLCJpYXQiOjE3MDUyMzU0MDIsImV4cCI6MTcwNTIzNTYxOCwianRpIjoiMzEwMDAwM2YtMTk4NC00ZGNjLTgwZjktNmUxYTZiY2QyOGRmIn0.SGOEdAIOqxqejcQHt8wBRgYmlviAJ2OFVcYARGi3Du8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/v1/getUserPreference",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"getUserPreference"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addNewUserPreference",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWEyOTRmM2MyMDU3ZTAzZjBlOGQ3MmMiLCJpYXQiOjE3MDUyMzg2NzIsImV4cCI6MTcxMDQyMjY3MiwianRpIjoiOGM1MDkxYzgtZmFiNC00OWRiLTgzOTMtZDc5Y2NiMjY1YTAzIn0.YYTy7eITXXMertf_jKESzPSiYlVxyQ5m1Kh3RKE5Zqg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"riskTolerance\": \"LOW\",\n    \"investmentHorizon\": \"shortTerm\",\n    \"investmentManagementPreference\": \"ACTIVE\",\n    \"sourcesOfIncome\": [\"Salary\", \"Rent\", \"Investments\"],\n    \"financialGoals\": [\"Starting a Business\"],\n    \"investmentCategoryPreference\":[\"National Benefit schemes\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/newUserPreference",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"newUserPreference"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editUserPreference",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWEyOTRmM2MyMDU3ZTAzZjBlOGQ3MmMiLCJpYXQiOjE3MDUyMzg2NzIsImV4cCI6MTcxMDQyMjY3MiwianRpIjoiOGM1MDkxYzgtZmFiNC00OWRiLTgzOTMtZDc5Y2NiMjY1YTAzIn0.YYTy7eITXXMertf_jKESzPSiYlVxyQ5m1Kh3RKE5Zqg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"riskTolerance\": \"MEDIUM\",\n    \"investmentHorizon\": \"longTerm\",\n    \"investmentManagementPreference\": \"ACTIVE\",\n    \"sourcesOfIncome\": [\"Salary\", \"Rent\", \"Investments\"],\n    \"financialGoals\": [\"Starting a Business\"],\n    \"investmentCategoryPreference\":[\"National Benefit schemes\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/editUserPreference",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"editUserPreference"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getInvestmentInsights",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWEyOTRmM2MyMDU3ZTAzZjBlOGQ3MmMiLCJpYXQiOjE3MDUyMzgyNDMsImV4cCI6MTcwNTMyNDY0MywianRpIjoiYjk2MTg5YzgtY2Q3MS00Y2RhLWIyODgtYWIxNzA0MTQyNmYyIn0.41ywPwfhl3x8M_HP3Vh_zsFu2hWKLWK8vCN1ngp_84A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8083/api/v1/getInsights",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"v1",
+						"getInsights"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
