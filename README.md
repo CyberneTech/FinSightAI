@@ -13,11 +13,17 @@ This is a Spring Boot-based microservice application designed and developed to g
 
 ### Microservices
  
-- **FinSightAI** : The user authentication service validates user credentials and manages session tokens, ensuring secure access to the system.
+- **FinSightAI** : service encompasses user authentication and financial profile management. It is designed to secure user sessions and personalize financial services based on user preferences.
+    + Manages user authentication data: Implements secure sign-in and log-in functionalities, including token-based authentication, ensuring secure and stateless authentication across HTTP requests. 
+    + Financial Profile Management: Allows users to create and edit their financial profiles, encompassing preferences like riskTolerance, investmentHorizon, and others.
 
-- **FinSight-LLMService** : For generating tailored investment insights, the services interact with the FinSightAI-LLMService, which in turn utilizes the GPT-3.5 Turbo via an integrated LLM API, leveraging its advanced natural language processing capabilities.
+- **FinSight-LLMService** : This service interfaces with the GPT-3.5 Turbo API to generate customized investment insights based on user financial profiles. Validates JWT token to maintain user session integrity.
+    + Insight Generation: microservice receives user requests for investment insights and constructs prompts using the financial profile data and sends HTTP requests to the GPT-3.5 Turbo API, utilizing its advanced NLP capabilities to analyze financial data and generate insights.
+    +  Rate Limiting: mircoservice enforces a rate limit of 5 requests per second to the API, considering the LLM response times. Ensures optimal utilization of the LLM API and maintains a high quality of service by preventing overuse and ensuring equitable access.
 
-FinSight-ClientLibrary - Common model and util classes used by both microservices  
+**FinSight-ClientLibrary** - Serves as a shared library containing common models and utilities used across FinSightAI microservices. Compiled into a JAR file, the library is included as a dependency in both microservices, promoting code reuse and consistency. 
+ + Contains, UserFinancialProfile model, a shared class that defines the structure of user financial data, used for generating investment insights and managing user preferences. 
+ + JWT Token Utility, with functionality to generate and validate JWTs for secure authentication and authorization processes.
 
 ### FinSightAI database
  The user authentication and preference data are persistently stored and managed in the FinSightAI MongoDB database, which offers high performance and flexibility to handle the schema-less data models typically required by dynamic user  
@@ -32,8 +38,12 @@ FinSight-ClientLibrary - Common model and util classes used by both microservice
 >   + financialGoals: Describes the user’s financial aspirations, like starting a business, which would influence the aggressiveness or conservatism of the investment strategy.
 >   + investmentCategoryPreference: Specifies the user's preference for certain investment categories, such as national benefit schemes, which could offer tax advantages or align with the user's values.
 
-## Scalability
-
+## Scalability and Performance Optimization
+- Microservices Architecture, deployed as independent units to allow for horizontal scaling in response to varying demand. Promotes resilience and agile deployment with a focus on discrete business functionalities.
+- Rate Limiting, ensures resource availability and consistent service quality by limiting the number of API requests
+- The use of a NoSQL database like MongoDB supports horizontal scaling and can handle large volumes of unstructured data.
+- Implementing caching to minimize calls to external APIs, mitigating latency and load, with independent scalability of the caching layer.
+- Integrating an API Gateway to efficiently handle traffic surges, providing load balancing and routing.
 
 ## Steps for Installation
 
@@ -52,26 +62,51 @@ FinSight-ClientLibrary - Common model and util classes used by both microservice
 
    api.secret.key=FinSightAI-Cybernetech
    ```
+   - In `FinSightAI-LLMService` update the mongodb settings with your connection URI, username, password, and database name.  
+    Replace openai token with your token value, and replace api.secret.key as required
+   ```sh
+   spring.data.mongodb.uri=mongodb+srv://<username>:<password>@cyborgclstr.0uye6xv.mongodb.net/<your-database-name>?retryWrites=true&w=majority
+   spring.data.mongodb.username=<username>
+   spring.data.mongodb.password=<password>
+
+   server.port=8083
+   api.openai.url=https://api.openai.com/v1/chat/completions
+   api.gpt.3.5.token=<openai-api-token>
+   api.llm.model=<openai-model>
+
+   api.secret.key=FinSightAI-Cybernetech
+   ```
 4. Build the project using Maven:
-* Navigate to the project directory in the terminal.
+* Navigate to the `FinSightAI-ClientLibrary` directory
+* Run the following Maven command to build the client lib and make `finsight-client-libs.jar` which is a dependency for other services:
+  ```sh
+   mvn clean install
+   ```
+5. Navigate to `FinSightAI` directory.
 * Run the following Maven command to build the project and download all the necessary dependencies:
   ```sh
    mvn clean install
    ```
-5. After the build is successful, start the Spring Boot application with the following command:
+6. After the build is successful, start the Spring Boot application with the following command:
    ```sh
    mvn spring-boot:run
    ```
+7. Now repeat steps `5` and `6` for `FinSightAI-LLMService` as well; Microservices should be up at following urls
+   ```
+   http://localhost:8080/
+   http://localhost:8083/
+   ```
 
-### Testing Endpoints with Postman
- A Postman collection is available to test the API endpoints: [go to file](postmanCollection/PostmanCollection-TravelPackageManagement.postman_collection.json)
+### Testing Endpoints
+1. Using the `FinSightAI-Frontend` application: [Goto](https://github.com/CyberneTech/FinSightAI-frontend.git) and replicate steps
+
+2. With Postman
+ A Postman collection is available to test the API endpoints: [go to file](./FinSightAI.postman_collection.json)
  <br/>To test the API endpoints:
 *Import the Postman collection and make sure the application is running at `http://localhost:8080.`*
 
 
 ## Future Enhancements
-- [ ] implementing DTO's for better response payloads for APIs and enhanced security
-- [ ] integrating user authentication
-- [ ] add a queueing service (eg:Kafka)
-- [ ] integrating with client side application
-- [ ] indexing database/ hot partitioning
+- [ ]  Implementing caching to minimize calls to external APIs
+- [ ]  Integrating an API Gateway to efficiently handle traffic surges, providing load balancing and routing.
+- [ ]  Polling/ Crawling data related to current capital market trends form external API and finetuning LLM to provide more accurate results 
