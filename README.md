@@ -11,6 +11,14 @@ This is a Spring Boot-based microservice application designed and developed to g
 -  Controllers call the microservices to perform the user authentication, preference management and investment insight generation, the user auth data and preference data is fetched from the FinSightAi Mongodb database. 
 - FinSightAI-LLMService requests integrated LLM API (gpt 3.5-turbo), providing investment advice, according to user preference and current market trends.
 
+## Scalability and Performance Optimization
+- Microservices Architecture, deployed as independent units to allow for horizontal scaling in response to varying demand. Promotes resilience and agile deployment with a focus on discrete business functionalities.
+- Rate Limiting, ensures resource availability and consistent service quality by limiting the number of API requests
+- The use of a NoSQL database like MongoDB supports horizontal scaling and can handle large volumes of unstructured data.
+- Implementing caching to minimize calls to external APIs, mitigating latency and load, with independent scalability of the caching layer.
+- Integrating an API Gateway to efficiently handle traffic surges, providing load balancing and routing.
+
+  
 ### Microservices
  
 - **FinSightAI** : service encompasses user authentication and financial profile management. It is designed to secure user sessions and personalize financial services based on user preferences.
@@ -25,6 +33,7 @@ This is a Spring Boot-based microservice application designed and developed to g
  + Contains, UserFinancialProfile model, a shared class that defines the structure of user financial data, used for generating investment insights and managing user preferences. 
  + JWT Token Utility, with functionality to generate and validate JWTs for secure authentication and authorization processes.
 
+
 ### FinSightAI database
  The user authentication and preference data are persistently stored and managed in the FinSightAI MongoDB database, which offers high performance and flexibility to handle the schema-less data models typically required by dynamic user  
  data and preferences.
@@ -38,12 +47,6 @@ This is a Spring Boot-based microservice application designed and developed to g
 >   + financialGoals: Describes the user’s financial aspirations, like starting a business, which would influence the aggressiveness or conservatism of the investment strategy.
 >   + investmentCategoryPreference: Specifies the user's preference for certain investment categories, such as national benefit schemes, which could offer tax advantages or align with the user's values.
 
-## Scalability and Performance Optimization
-- Microservices Architecture, deployed as independent units to allow for horizontal scaling in response to varying demand. Promotes resilience and agile deployment with a focus on discrete business functionalities.
-- Rate Limiting, ensures resource availability and consistent service quality by limiting the number of API requests
-- The use of a NoSQL database like MongoDB supports horizontal scaling and can handle large volumes of unstructured data.
-- Implementing caching to minimize calls to external APIs, mitigating latency and load, with independent scalability of the caching layer.
-- Integrating an API Gateway to efficiently handle traffic surges, providing load balancing and routing.
 
 ## Steps for Installation
 
