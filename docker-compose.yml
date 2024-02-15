@@ -1,0 +1,20 @@
+version : '3'
+
+services:
+  fsai_llm:
+    container_name: "fsai_llm"
+    build:
+      context: ./FinSight-LLMService
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    restart: on-failure
+  
+  fsai:
+    container_name: "fsai"
+    build:
+      context: ./FinSightAI
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8080
+    restart: on-failure
